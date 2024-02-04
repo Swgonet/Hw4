@@ -70,8 +70,15 @@ def save_data(data):
         date = str(datetime.now())
         result = {date: parse_dict}
         print(result)
-        with open('storage/data.json', 'a', encoding='utf-8') as f:
-            json.dump(result, f, ensure_ascii=False, indent=4)
+        if os.path.exists('storage/data.json'):
+            with open(f'storage/data.json', 'r', encoding='utf-8') as f:
+                history = json.load(f)
+                history.update(result)
+            with open(f'storage/data.json', 'w', encoding='utf-8') as ft: 
+                json.dump(history, ft, ensure_ascii=False, indent=4)
+        else:
+            with open('storage/data.json', 'w') as file:
+                json.dump(result, file, ensure_ascii=False, indent=4)
     except ValueError as er:
         logging.error(er)
     except OSError as err:
